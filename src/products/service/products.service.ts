@@ -31,11 +31,14 @@ export class ProductsService {
     return await this.findProductByIdService.handle(id);
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<void> {
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
     return await this.updateProductService.handle(id, updateProductDto);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Product> {
     return await this.deleteProductService.handle(id);
   }
 }

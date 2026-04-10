@@ -38,11 +38,14 @@ export class ProductRepository extends PrismaClient implements OnModuleInit {
     return await this.product.findFirst({ where: { id, deleted: false } });
   }
 
-  public async update(id: number, product: UpdateProductDto): Promise<void> {
-    await this.product.update({ where: { id }, data: product });
+  public async update(id: number, product: UpdateProductDto): Promise<Product> {
+    return await this.product.update({ where: { id }, data: product });
   }
 
-  public async delete(id: number): Promise<void> {
-    await this.product.update({ where: { id }, data: { deleted: true } });
+  public async delete(id: number): Promise<Product> {
+    return await this.product.update({
+      where: { id },
+      data: { deleted: true },
+    });
   }
 }

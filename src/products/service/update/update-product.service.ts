@@ -1,5 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { UpdateProductDto } from 'src/products/dto/update-product.dto';
+import { Product } from 'src/products/entities/product.entity';
 import { ProductRepository } from 'src/products/repository/product.repository';
 
 @Injectable()
@@ -9,20 +11,22 @@ export class UpdateProductService {
   public async handle(
     id: number,
     updateProductDto: UpdateProductDto,
-  ): Promise<void> {
+  ): Promise<Product> {
     if (!id)
-      throw new HttpException(
-        { status: HttpStatus.BAD_REQUEST, error: 'Id is required' },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new RpcException({
+        status: HttpStatus.BAD_REQUEST,
+        message: 'Id is required',
+      });
 
     delete updateProductDto.id;
-
-    await this.productRepository.update(id, updateProductDto).catch(() => {
-      throw new HttpException(
-        { status: HttpStatus.NOT_FOUND, error: 'Product not found' },
-        HttpStatus.NOT_FOUND,
-      );
-    });
+    try {
+      return await this.productRepository.update(id, updateProductDto);
+    } catch (error) {
+      console.log(error);
+      throw new RpcException({
+        status: HttpStatus.NOT_FOUND,
+        message: 'Product not found',
+      });
+    }
   }
 }
