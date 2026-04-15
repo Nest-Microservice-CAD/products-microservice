@@ -1,7 +1,6 @@
 import { Logger, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Product } from '@prisma/client';
 import { CreateProductDto } from '../dto/create-product.dto';
-import { Product } from '../entities/product.entity';
 import { PaginationResponseDto } from 'src/common';
 import { UpdateProductDto } from '../dto/update-product.dto';
 
@@ -36,6 +35,17 @@ export class ProductRepository extends PrismaClient implements OnModuleInit {
 
   public async findOne(id: number): Promise<Product> {
     return await this.product.findFirst({ where: { id, deleted: false } });
+  }
+
+  public async findByIds(ids: number[]): Promise<Product[]> {
+    return await this.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+        deleted: false,
+      },
+    });
   }
 
   public async update(id: number, product: UpdateProductDto): Promise<Product> {

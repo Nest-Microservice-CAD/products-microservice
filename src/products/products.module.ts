@@ -9,6 +9,7 @@ import {
   ProductsService,
   UpdateProductService,
 } from './service';
+import { ValidateProductsService } from './service/get/validate-products.service';
 
 const services: Provider[] = [
   ProductsService,
@@ -17,6 +18,7 @@ const services: Provider[] = [
   FindProductByIdService,
   UpdateProductService,
   DeleteProductService,
+  ValidateProductsService,
 ];
 const repositories: Provider[] = [ProductRepository];
 @Module({

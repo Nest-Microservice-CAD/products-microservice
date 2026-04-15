@@ -9,6 +9,7 @@ import { FindProductByIdService } from './get/find-product-by-id.service';
 import { UpdateProductService } from './update/update-product.service';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { DeleteProductService } from './delete/delete-product.service';
+import { ValidateProductsService } from './get/validate-products.service';
 
 @Injectable()
 export class ProductsService {
@@ -18,6 +19,7 @@ export class ProductsService {
     private readonly findProductByIdService: FindProductByIdService,
     private readonly updateProductService: UpdateProductService,
     private readonly deleteProductService: DeleteProductService,
+    private readonly validateProductService: ValidateProductsService,
   ) {}
   async create(dto: CreateProductDto): Promise<Product> {
     return await this.createProductService.handle(dto);
@@ -40,5 +42,9 @@ export class ProductsService {
 
   async remove(id: number): Promise<Product> {
     return await this.deleteProductService.handle(id);
+  }
+
+  async validateProducts(ids: number[]): Promise<Product[]> {
+    return await this.validateProductService.handle(ids);
   }
 }
